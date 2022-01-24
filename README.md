@@ -27,6 +27,33 @@ The sensors transmit data periodically on 443.92Mhz using OOK modulation.  The 8
 
 The data packet looks like this:
 
+URH analog view:
+![analog](https://user-images.githubusercontent.com/20508816/150719833-2e1b397e-f9be-414d-bd7e-c03a8261e8df.png)
+
+URH demodulated view:
+![demodulated](https://user-images.githubusercontent.com/20508816/150719981-64000301-30e4-42b5-baad-9f7d474f099f.png)
+
+URH NRZ bits:
+![bits_nrz](https://user-images.githubusercontent.com/20508816/150720036-d1e0f646-27f6-4242-8e88-ae15a5b69ebf.png)
+
+URH Manchester I hex:
+![hex_manchester_i](https://user-images.githubusercontent.com/20508816/150720065-10196355-b948-48df-8451-88ce38192a26.png)
+
+From this we can see:
+- 32 bits of preamble (1010...)
+- checksum of 0xE5 (byte 0)
+- sensor ID of 0x563ED9 (bytes 1-3)
+- data of 0x2C4B0001
+
+Decoding the data portion we get:
+- pressure = 2nd nibble of byte 7 + byte 4 = 0x012C
+  - 0x012C / 0.4 = 750 kPa
+  - 750 / 6.895 = 108.8 psi
+- temperature = byte 5 = 0x4B
+  - 0x48 - 50 = 25 deg C
+  - (25 * 1.8) + 32 = 77 deg F
+- checksum = (sum of bytes 1-7) % 256
+
 ## Modules
 
 ### Heltec WiFi LoRa 32 (V2)
