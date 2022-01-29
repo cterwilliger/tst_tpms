@@ -23,7 +23,7 @@ Heltec WiFi LoRa 32 (V2) modules were used initially because of their large bang
 
 ## TST-507 basics
 
-The sensors transmit data periodically on 443.92Mhz using OOK modulation.  The 8 byte data packet contains a checksum, sensor ID, and measurement data.
+The sensors transmit data periodically on 443.92Mhz using OOK modulation.  The 8 byte data packet contains a checksum, sensor ID, and measurement data.  The data packet is encoded with Manchester I (IEEE 802.3).
 
 The data packet looks like this:
 
@@ -58,7 +58,14 @@ Decoding the data portion we get:
 
 ### Heltec WiFi LoRa 32 (V2)
 
-This module has packet mode or direct mode. Decodes Manchester II natively.
+This module has a bit synchronizer and a packet engine.  I wanted to make the module do as much work as possible.  The bit synchronizer looks for the preamble (successive 1010...).  The default settings look for 2 bytes of preamble.  The packet engine will then look for a sync byte.  Since the TST-507 doesn't really have a sync byte, we can fake it out by using a sync byte of 0xA9.  The raw data stream looks like this:
+
+1010101010101010101010101010101001...
+
+Since there is always a "01" after the last preamble nibble of "1010", we can call this our "sync byte", 0xA9.  This means we have to put the "01" back into the data stream before processing because the packet engine strips whatever we call the sync byte from the stream.  This is done by shifting the stream right by 2 bits and prepending "01".
+
+TST-507 encodes the stream using Manchester I.  However, the SX1278 only performs Manchester II.  So, we use NRZ encoding and do the Manchester I in code.  After that, we convert the measurement data to human usable form using the formulas above.
+
 
 ## To Do
-Get running on other modules such as CC1101
+Get the code running on other modules such as the TI CC1101.
