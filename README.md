@@ -50,7 +50,7 @@ Decoding the data portion we get:
   - 0x012C / 0.4 = 750 kPa
   - 750 / 6.895 = 108.8 psi
 - temperature = byte 5 = 0x4B
-  - 0x48 - 50 = 25 deg C
+  - 0x4B - 50 = 25 deg C
   - (25 * 1.8) + 32 = 77 deg F
 - checksum = (sum of bytes 1-7) % 256
 
