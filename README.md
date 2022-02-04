@@ -66,6 +66,9 @@ Since there is always a "01" after the last preamble nibble of "1010", we can ca
 
 TST-507 encodes the stream using Manchester I.  However, the SX1278 only performs Manchester II.  So, we use NRZ encoding and do the Manchester I in code.  After that, we convert the measurement data to human usable form using the formulas above.
 
+### CC1101
+
+This is a very common FSK/OOK radio module.  It can be attached to most microcontrollers.  It has been tested using a Heltec WiFi ESP32 module as the controller, but the code should work with any ESP32 module.  It also has a packet engine that can detect the preamble and sync word.
 
 ## To Do
-Get the code running on other modules such as the TI CC1101.
+Improve performance of the CC1101 example.  It seems to only see about a third of the packets the Heltec LoRa module does.
