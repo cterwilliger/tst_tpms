@@ -54,6 +54,11 @@ Decoding the data portion we get:
   - (25 * 1.8) + 32 = 77 deg F
 - checksum = (sum of bytes 1-7) % 256
 
+Flags:
+- Byte 6
+  - 0x10 = Fast Leak
+  - 0x20 = Low Battery
+
 ## Modules
 
 ### Heltec WiFi LoRa 32 (V2)
